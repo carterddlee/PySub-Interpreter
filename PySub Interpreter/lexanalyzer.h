@@ -39,13 +39,14 @@ private:
     typedef pair<string, categoryType> pairType;
 
     tokenType tokenInfo;
+    tokenLineType tokenLine;
+    pairType tokenPair;
 
 
 public:
     void readTokens(vector<string> programCode);
 
-
-
+    void displayTokens();
 
 };
 

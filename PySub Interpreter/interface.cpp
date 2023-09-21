@@ -58,8 +58,15 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token)
 	if (com == "read")
 		read(arg, token);
 
-	if (com == "show")
+	if (com == "show"&& arg=="")
 		show(programCode);
+
+	if (com == "show" && arg != "")
+	{
+		token.displayTokens();
+		cout << "This is displaying the tokens";
+	}
+
 
 	if (com == "clear")
 		clear();
