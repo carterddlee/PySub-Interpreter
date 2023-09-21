@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "lexanalyzer.h"
+
 //Test
 using namespace std;
 
@@ -33,9 +35,9 @@ private:
 
     programType programCode;
 
-    void getInput(string command, string argument);
+    void getInput(string command, string argument, LexicalAnalyzer& token);
 
-    void read(string argument);
+    void read(string argument, LexicalAnalyzer& token);
 
     void show(const vector <string> v);
 

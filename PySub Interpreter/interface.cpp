@@ -3,6 +3,7 @@
 #include <map>
 #include <fstream>
 #include "interface.h"
+#include "lexanalyzer.h"
 using namespace std;
 
 
@@ -12,6 +13,8 @@ void Interface::startInterface()
 	cout << "Enter program lines or read(<filename>.py) at command line interface" << endl;
 	cout << "Type 'help' for more information or 'quit' to exit" << endl << endl;
 	cout << ">>> ";
+
+	LexicalAnalyzer lexAnalysis;
 
 	while (keepGoing)
 	{
@@ -32,11 +35,11 @@ void Interface::startInterface()
 			else
 				argumentName += ch;
 		}
-		getInput(commandName, argumentName);
+		getInput(commandName, argumentName, lexAnalysis);
 	}
 }
 
-void Interface::getInput(string com, string arg)
+void Interface::getInput(string com, string arg, LexicalAnalyzer& token)
 {
 	if (com == "quit")
 		keepGoing = false;
@@ -53,7 +56,7 @@ void Interface::getInput(string com, string arg)
 
 
 	if (com == "read")
-		read(arg);
+		read(arg, token);
 
 	if (com == "show")
 		show(programCode);
@@ -65,7 +68,7 @@ void Interface::getInput(string com, string arg)
 }
 
 
-void Interface::read(string argName)
+void Interface::read(string argName, LexicalAnalyzer& token)
 {
 	clear();
 	ifstream file;
@@ -73,6 +76,7 @@ void Interface::read(string argName)
 	file.open(argName);
 	while (getline(file, line))
 		programCode.push_back(line);
+	token.readTokens(programCode);
 }
 
 void Interface::show(const vector<string> programCode)
