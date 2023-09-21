@@ -63,13 +63,17 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token)
 
 	if (com == "show" && arg != "")
 	{
+		cout << "***** " << "TOKEN INFORMATION " << "******" << endl;
 		token.displayTokens();
-		cout << "This is displaying the tokens";
+		cout << endl << ">>>";
 	}
 
 
 	if (com == "clear")
+	{
 		clear();
+		token.clearTokens();
+	}
 
 
 }

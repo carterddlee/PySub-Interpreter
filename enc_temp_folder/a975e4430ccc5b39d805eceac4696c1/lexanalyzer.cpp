@@ -15,6 +15,12 @@ void LexicalAnalyzer::displayTokens()
 	{
 		int tokensInLine = 1; // Initialize token count for the current line
 
+		for (const auto& tokenPair : tokenLine)
+		{
+            if (tokenPair.second == categoryType::INDENT)
+            {
+                lineCount++;
+               }
 			cout << "Line " << lineCount << ", Token " << tokensInLine++ << ": ";
 
 			cout << "Token Value: " << tokenPair.first << " Token Category : ";
