@@ -48,8 +48,6 @@ public:
 
     void displayTokens();
 
-    void clearTokens();
-
 };
 
 #endif LEXANALYZER_H

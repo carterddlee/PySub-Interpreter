@@ -9,104 +9,97 @@ using namespace std;
 
 void LexicalAnalyzer::displayTokens()
 {
-	int lineCount = 0; // Initialize line count
+    int lineCount = 0; // Initialize line count
 
-	for (const auto& tokenLine : tokenInfo)
-	{
-		int tokensInLine = 1; // Initialize token count for the current line
+    for (const auto& tokenLine : tokenInfo)
+    {
+        int tokensInLine = 0; // Initialize token count for the current line
+        cout << "Line[" << lineCount << "]" << endl;
 
-			cout << "Line " << lineCount << ", Token " << tokensInLine++ << ": ";
+        for (const auto& tokenPair : tokenLine)
+        {
+            cout << "Token " << ++tokensInLine << ": ";
 
-			cout << "Token Value: " << tokenPair.first << " Token Category : ";
+            cout << "Token Value: " << tokenPair.first << " Token Category : ";
 
-			switch (tokenPair.second)
-			{
-			case categoryType::KEYWORD:
-				cout << "KEYWORD";
-				break;
-			case categoryType::IDENTIFIER:
-				cout << "IDENTIFIER";
-				break;
-			case categoryType::STRING_LITERAL:
-				cout << "STRING_LITERAL";
-				break;
-			case categoryType::NUMERIC_LITERAL:
-				cout << "NUMERIC_LITERAL";
-				break;
-			case categoryType::ASSIGNMENT_OP:
-				cout << "ASSIGNMENT_OP";
-				break;
-			case categoryType::ARITH_OP:
-				cout << "ARITH_OP";
-				break;
-			case categoryType::LOGICAL_OP:
-				cout << "LOGICAL_OP";
-				break;
-			case categoryType::RELATIONAL_OP:
-				cout << "RELATIONAL_OP";
-				break;
-			case categoryType::LEFT_PAREN:
-				cout << "LEFT_PAREN";
-				break;
-			case categoryType::RIGHT_PAREN:
-				cout << "RIGHT_PAREN";
-				break;
-			case categoryType::COLON:
-				cout << "COLON";
-				break;
-			case categoryType::COMMA:
-				cout << "COMMA";
-				break;
-			case categoryType::COMMENT:
-				cout << "COMMENT";
-				break;
-			case categoryType::INDENT:
-				cout << "INDENT";
-				break;
-			case categoryType::UNKNOWN:
-				cout << "UNKNOWN";
-				break;
-			default:
-				cout << "UNKNOWN";
-				break;
-			}
+            switch (tokenPair.second)
+            {
+            case categoryType::KEYWORD:
+                cout << "KEYWORD";
+                break;
+            case categoryType::IDENTIFIER:
+                cout << "IDENTIFIER";
+                break;
+            case categoryType::STRING_LITERAL:
+                cout << "STRING_LITERAL";
+                break;
+            case categoryType::NUMERIC_LITERAL:
+                cout << "NUMERIC_LITERAL";
+                break;
+            case categoryType::ASSIGNMENT_OP:
+                cout << "ASSIGNMENT_OP";
+                break;
+            case categoryType::ARITH_OP:
+                cout << "ARITH_OP";
+                break;
+            case categoryType::LOGICAL_OP:
+                cout << "LOGICAL_OP";
+                break;
+            case categoryType::RELATIONAL_OP:
+                cout << "RELATIONAL_OP";
+                break;
+            case categoryType::LEFT_PAREN:
+                cout << "LEFT_PAREN";
+                break;
+            case categoryType::RIGHT_PAREN:
+                cout << "RIGHT_PAREN";
+                break;
+            case categoryType::COLON:
+                cout << "COLON";
+                break;
+            case categoryType::COMMA:
+                cout << "COMMA";
+                break;
+            case categoryType::COMMENT:
+                cout << "COMMENT";
+                break;
+            case categoryType::INDENT:
+                cout << "INDENT";
+                break;
+            case categoryType::UNKNOWN:
+                cout << "UNKNOWN";
+                break;
+            default:
+                cout << "UNKNOWN";
+                break;
+            }
 
-			cout << endl;
-		}
-		lineCount++; // Move to the next line
-	}
+            cout << endl;
+        }
+        cout << "--------------------------------------" << endl;
+        lineCount++; // Move to the next line
+    }
 }
-
-
-void LexicalAnalyzer:: clearTokens()
-{
-    tokenInfo.clear();
-}
-
-
-
-
-
 
 bool isKeyword(string word)
-	{
-		vector<string> keywords = {"print", "if", "elif", "else", "while", "int", "input"};
-		for (auto keyword : keywords)
-			if (word == keyword) return true;
+{
+    vector<string> keywords = { "print", "if", "elif", "else", "while", "int", "input" };
+    for (auto keyword : keywords)
+        if (word == keyword) return true;
 
-		return false;
-	}
+    return false;
+}
 
 
 
 
 bool isLogicalOperator(string word)
 {
-	vector<string> operators = { "and", "or", "not" };
-	for (auto op : operators)
-		if (word == op) return true;
+    vector<string> operators = { "and", "or", "not" };
+    for (auto op : operators)
+        if (word == op) return true;
 
-	return false;
+    return false;
 }
 
 
@@ -116,13 +109,13 @@ bool isLogicalOperator(string word)
 
 bool isUnderScore(char c)
 {
-	return c == '_';
+    return c == '_';
 }
 
 
 bool isIdentifierCharacter(char c)
 {
-	return isalpha(c) || isdigit(c) || isUnderScore(c);
+    return isalpha(c) || isdigit(c) || isUnderScore(c);
 }
 
 
@@ -145,8 +138,14 @@ void LexicalAnalyzer::readTokens(vector<string> programCode)
 
             if (isdigit(c))
             {
-                tokenValue += c; // Append digits to the existing tokenValue
-                tokenCategory = categoryType::NUMERIC_LITERAL;
+                while (isdigit(c))
+                {
+                    tokenValue += c; // Append digits to the existing tokenValue
+                    tokenCategory = categoryType::NUMERIC_LITERAL;
+
+                    c = programLine[++i];
+
+                }
             }
             else if (isalpha(c))
             {
@@ -215,9 +214,14 @@ void LexicalAnalyzer::readTokens(vector<string> programCode)
             }
             else if (isspace(c))
             {
-                c = '\0';
-                tokenValue = c; // Store one space character
-                tokenCategory = categoryType::INDENT;
+                if (tokenLine.size() == 0)
+                {
+                    c = '\0';
+                    tokenValue = c; // Store one space character
+                    tokenCategory = categoryType::INDENT;
+                }
+                else
+                    continue;
             }
             else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '&')
             {

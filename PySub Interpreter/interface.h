@@ -10,47 +10,47 @@ using namespace std;
 
 class Interface {
 public:
-    Interface()
-    {
-        helpMap["clear"] = "\nClears out or deletes any lines that are stored in the program data structure\n";
-        helpMap["help"] = "\nWhen no parameter is given, then the help command will enter the help utility.\n";
-        helpMap["read"] = "\nReads a Python file.\n";
-        helpMap["quit"] = "\nExits the interpreter interface\n";
-        helpMap["show"] = "\nShows the lines of the program that are stored in program data structure. Includes line number when displaying each line of code in the program.\n";
-        helpMap["clear()"] = "\nClears out or deletes any lines that are stored in the program data structure\n";
-        helpMap["help()"] = "\nWhen no parameter is given, then the help command will enter the help utility. \n";
-        helpMap["read()"] = "\nReads a Python file.\n";
-        helpMap["quit()"] = "\nExits the interpreter interface\n";
-        helpMap["show()"] = "\nShows the lines of the program that are stored in program data structure. Include line number when displaying each line of code in the program\n";
-    }
+	Interface()
+	{
+		helpMap["clear"] = "\nClears out or deletes any lines that are stored in the program data structure\n";
+		helpMap["help"] = "\nWhen no parameter is given, then the help command will enter the help utility.\n";
+		helpMap["read"] = "\nReads a Python file.\n";
+		helpMap["quit"] = "\nExits the interpreter interface\n";
+		helpMap["show"] = "\nShows the lines of the program that are stored in program data structure. Includes line number when displaying each line of code in the program.\n";
+		helpMap["clear()"] = "\nClears out or deletes any lines that are stored in the program data structure\n";
+		helpMap["help()"] = "\nWhen no parameter is given, then the help command will enter the help utility. \n";
+		helpMap["read()"] = "\nReads a Python file.\n";
+		helpMap["quit()"] = "\nExits the interpreter interface\n";
+		helpMap["show()"] = "\nShows the lines of the program that are stored in program data structure. Include line number when displaying each line of code in the program\n";
+	}
 
-    void startInterface();
+	void startInterface();
 
 
 private:
-    map<string, string> helpMap;
+	map<string, string> helpMap;
 
 
-    typedef vector<string> programType;
+	typedef vector<string> programType;
 
-    programType programCode;
+	programType programCode;
 
-    void getInput(string command, string argument, LexicalAnalyzer& token);
+	void getInput(string command, string argument, LexicalAnalyzer& token);
 
-    void read(string argument, LexicalAnalyzer& token);
+	void read(string argument, LexicalAnalyzer& token);
 
-    void show(const vector <string> v);
+	void show(const vector <string> v);
 
-    void clear();
+	void clear();
 
 
-    void helpUtility();
+	void helpUtility();
 
-    void commands();
+	void commands();
 
-    void immediateHelp(string argument);
+	void immediateHelp(string argument);
 
-    bool keepGoing = true;
+	bool keepGoing = true;
 
 };
 
@@ -58,6 +58,8 @@ private:
 
 
 #endif INTERFACE_H
+
+
 
 
 
