@@ -24,8 +24,14 @@ void Interface::startInterface()
         string argumentName = "";
 
         bool addToCommand = true;
+        bool isEquation;
         for (auto ch : input)
         {
+            if (isdigit(ch) || ch == '(')
+            {
+                isEquation;
+                break;
+            }
             if (ch == ')')
                 break;
             else if (ch == '(')
@@ -35,11 +41,11 @@ void Interface::startInterface()
             else
                 argumentName += ch;
         }
-        getInput(commandName, argumentName, lexAnalysis);
+        getInput(commandName, argumentName, lexAnalysis, isEquation, input);
     }
 }
 
-void Interface::getInput(string com, string arg, LexicalAnalyzer& token)
+void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input)
 {
     if (com == "quit")
         keepGoing = false;
@@ -71,6 +77,11 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token)
     if (com == "clear")
         clear();
 
+    if (isEquation)
+    {
+        auto tokenLine=token.readTokenLine(input);
+        infixToPostfix(tokenLine);
+    }
 
 }
 

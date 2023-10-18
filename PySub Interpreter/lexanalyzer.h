@@ -29,8 +29,8 @@ public:
         UNKNOWN
     };
 
-private:
 
+public:
 
     typedef vector<vector<pair<string, categoryType>>> tokenType;
 
@@ -38,16 +38,24 @@ private:
 
     typedef pair<string, categoryType> pairType;
 
+    void readTokens(vector<string> programCode);
+
+    tokenLineType readTokenLine(string tokenLine);
+
+    void displayTokens();
+
+
+
+private:
+
     tokenType tokenInfo;
     tokenLineType tokenLine;
     pairType tokenPair;
 
 
-public:
-    void readTokens(vector<string> programCode);
-
-    void displayTokens();
 
 };
+
+
 
 #endif LEXANALYZER_H

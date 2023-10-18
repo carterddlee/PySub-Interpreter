@@ -5,7 +5,7 @@
 #include <map>
 #include "lexanalyzer.h"
 
-//Test
+
 using namespace std;
 
 class Interface {
@@ -35,7 +35,7 @@ private:
 
 	programType programCode;
 
-	void getInput(string command, string argument, LexicalAnalyzer& token);
+	void getInput(string command, string argument, LexicalAnalyzer& token, bool isEquation, string input);
 
 	void read(string argument, LexicalAnalyzer& token);
 
