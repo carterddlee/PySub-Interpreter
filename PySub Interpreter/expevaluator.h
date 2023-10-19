@@ -9,9 +9,12 @@
 using namespace std;
 
 class expEvaluator {
-    friend class interface;
+
 public:
     LexicalAnalyzer::tokenLineType infixToPostfix(LexicalAnalyzer::tokenLineType tokenLine);
+
+    int PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix);
+
 
 private:
     bool isOperand(LexicalAnalyzer::pairType);
@@ -20,6 +23,12 @@ private:
 
 
     int assigningPrecedence(string);
+
+    int StringtoDigit(string element);
+
+
+    int operandEvaluation(int operand1, int operand2, string sym);
+
 
     typedef std::map<std::string, std::string> symbolTableType;
     symbolTableType symbolTable;
