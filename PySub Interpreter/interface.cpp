@@ -84,7 +84,9 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     if (isEquation)
     {
         auto tokenLine=token.readTokenLine(input);
-        expEvaluation.infixToPostfix(tokenLine);
+        auto PostfixEvaluator = expEvaluation.infixToPostfix(tokenLine);
+        int result=expEvaluation.PostfixEvaluator(PostfixEvaluator);
+        cout << "The answer to the equation is " << result << endl;
     }
 
 }

@@ -142,7 +142,7 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 	while (!stackVect.empty())
 	{
 		postFix.push_back(stackVect.top());
-		stackVect.top();
+		stackVect.pop();
 	}
 	return postFix;
 }
@@ -151,26 +151,44 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 
 int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 {
-	stack<pair<string, LexicalAnalyzer::categoryType>> stackVect;
+	stack<int> stackVect;
 
 	for (auto i : postFix)
 	{
 		if (isOperand(i))
-			stackVect.push(i);
+			stackVect.push(StringtoDigit(i.first));
 
 		else if (i.second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP || i.second == LexicalAnalyzer::categoryType::ARITH_OP || i.second == LexicalAnalyzer::categoryType::LOGICAL_OP || i.second == LexicalAnalyzer::categoryType::RELATIONAL_OP)
 		{
-			int operand2 = StringtoDigit(stackVect.top().first);
+			int operand2 = stackVect.top();
 			stackVect.pop();
-			int operand1 = StringtoDigit(stackVect.top().first);
+			int operand1 = stackVect.top();
 			stackVect.pop();
 
-			stackVect.push(expEvaluator::operandEvaluation(operand1, operand2, i.first));
+			int result= expEvaluator::operandEvaluation(operand1, operand2, i.first);
+
+			stackVect.push(result);
 			postFix.pop_back();
+		}
+		
+		else if (i.first == "++")
+		{
+			int operand = stackVect.top();
+			stackVect.pop();
+			operand++;
+			stackVect.push(operand);
 
 		}
 
+		else if (i.first == "--")
+		{
+			int operand = stackVect.top();
+			stackVect.pop();
+			operand--;
+			stackVect.push(operand);
 
+		}
+		return 	stackVect.top();
 
 	}
 	return 0;
