@@ -165,7 +165,9 @@ int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 			int operand1 = StringtoDigit(stackVect.top().first);
 			stackVect.pop();
 
-			int result = expEvaluator::operandEvaluation(operand1, operand2, i.first);
+			stackVect.push(expEvaluator::operandEvaluation(operand1, operand2, i.first));
+			postFix.pop_back();
+
 		}
 
 
