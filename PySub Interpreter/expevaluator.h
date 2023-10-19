@@ -12,13 +12,13 @@ class expEvaluator {
 public:
 
 private:
-    bool isOperand(categoryType);
+    bool isOperand(LexicalAnalyzer::pairType);
 
     int assigningPrecedence(string);
 
     typedef std::map<std::string, std::string> symbolTableType;
     symbolTableType symbolTable;
-    void infixToPostfix(tokenLineType tokenLine);
+    LexicalAnalyzer :: tokenLineType infixToPostfix(LexicalAnalyzer::tokenLineType tokenLine);
 
 };
 

@@ -5,12 +5,13 @@
 #include "interface.h"
 #include "lexanalyzer.h"
 #include "expevaluator.h"
+#include "stack"
 
 using namespace std;
 
-bool expEvaluator:: isOperand(categoryType operand)
+bool expEvaluator:: isOperand(LexicalAnalyzer::pairType i)
 {
-	
+	return i.second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP || i.second == LexicalAnalyzer::categoryType::ARITH_OP || i.second == LexicalAnalyzer::categoryType::LOGICAL_OP || i.second == LexicalAnalyzer::categoryType::RELATIONAL_OP;
 }
 
 int expEvaluator::assigningPrecedence(string symbol)
@@ -28,46 +29,41 @@ int expEvaluator::assigningPrecedence(string symbol)
 	if (symbol == "or")
 		return 0;
 }
-
-expEvaluator::infixToPostfix(tokenLineType tokenLine)
+LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::tokenLineType inFix)
 {
 	int precedence;
 	
-	vector<pair<string, categoryType>> inFix;
-	inFix = tokenLine;
 
-	vector<pair<string, categoryType>> stackVect;
+	stack<pair<string, LexicalAnalyzer ::categoryType>> stackVect;
 
-	vector<pair<string, categoryType>> postFix;
+	vector<pair<string, LexicalAnalyzer:: categoryType>> postFix;
 
 	for (auto i : inFix)
 	{
 		if (isdigit(i.first))
 		{
-			postFix.push_back(i.first);
+			postFix.push_back(i);
 			continue;
 		}
 		
-		if (i.first == "(")
-			stackVect.push_back(i.first);
+		else if (i.first == "(")
+			stackVect.push(i);
 
-		if (i.first == ")")
+		else if (i.first == ")")
 		{
-			while (stackVect.first != "(")
+			while (stackVect.top().first != "(")
 			{
-				for (auto it = stackVect.rbegin(); it != stackVect.rend(); ++it)
-					stackVect.push_back(it.first);
+				stackVect.pop();
 
 			}
-			stackVect.pop_back();
+			stackVect.pop();
 		}
 
-				stackVect.push_back(i.first)
 
-		if (i.second == ASSIGNMENT_OP || i.second == ARITH_OP || i.second == LOGICAL_OP || i.second == RELATIONAL_OP)
+		else if (i.second == LexicalAnalyzer::categoryType :: ASSIGNMENT_OP || i.second == LexicalAnalyzer::categoryType:: ARITH_OP || i.second == LexicalAnalyzer::categoryType:: LOGICAL_OP || i.second == LexicalAnalyzer:: categoryType :: RELATIONAL_OP)
 		{
 			precedence = assigningPrecedence(i.first);
-			if (!stackVect.empty() || isOperand(stackVect.back().second) || )
+			if (!stackVect.empty() && isOperand(stackVect.back().second) || )
 		}
 
 	}
