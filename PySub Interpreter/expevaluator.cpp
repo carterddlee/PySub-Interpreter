@@ -2,37 +2,43 @@
 #include <string>
 #include <map>
 #include <fstream>
+#include <stack>
 #include "interface.h"
 #include "lexanalyzer.h"
 #include "expevaluator.h"
-#include "stack"
 
 using namespace std;
 
-bool expEvaluator:: isOperand(LexicalAnalyzer::pairType i)
+bool expEvaluator:: isOperator(LexicalAnalyzer::pairType i)
 {
 	return i.second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP || i.second == LexicalAnalyzer::categoryType::ARITH_OP || i.second == LexicalAnalyzer::categoryType::LOGICAL_OP || i.second == LexicalAnalyzer::categoryType::RELATIONAL_OP;
 }
 
 bool expEvaluator:: IsaDigit(string value)
 {
-	return value == "0" || value == "1" || value == "3" || value == "4" || value == "5" || value == "6" || value == "7" || value == "8" || value == "9";
+	return value == "0" || value == "1" || value == "2" || value == "3" || value == "4" || value == "5" || value == "6" || value == "7" || value == "8" || value == "9";
 }
 
 int expEvaluator::assigningPrecedence(string symbol)
 {
 	if (symbol == "*" || symbol == "/" || symbol == "%")
 		return 5;
-	if (symbol == "+" || symbol == "-")
+	else if (symbol == "+" || symbol == "-")
 		return 4;
-	if (symbol == "<" || symbol == "<=" || symbol == ">" || symbol == ">=" || symbol == "!=" || symbol == "==")
+	else if (symbol == "<" || symbol == "<=" || symbol == ">" || symbol == ">=" || symbol == "!=" || symbol == "==")
 		return 3;
-	if (symbol == "not")
+	else if (symbol == "not")
 		return 2;
-	if (symbol == "and")
+	else if (symbol == "and")
 		return 1;
-	if (symbol == "or")
+	else if (symbol == "or")
 		return 0;
+
+	else
+	{
+		cout << "Error, invalid expression.";
+		return 0;
+	}
 }
 
 
@@ -89,8 +95,15 @@ int expEvaluator::operandEvaluation(int operand1, int operand2, string sym)
 			return 0; // operand1 not operand2 is false
 	if (sym == "and")
 		return operand1 && operand2;
-	if (sym == "and")
+	if (sym == "||")
 		return operand1 || operand2;
+
+	else
+	{
+		cout << "Error, invalid expression." << endl;
+		return 0;
+	}
+		
 }
 
 
@@ -116,19 +129,18 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 
 		else if (i.first == ")")
 		{
-			while (stackVect.top().first != "(")
+			while (!stackVect.empty() && stackVect.top().first != "(")
 			{
 				stackVect.pop();
-
 			}
 			stackVect.pop();
 		}
 
 
-		else if (isOperand(i))
+		else if (isOperator(i))
 		{
 			precedence = assigningPrecedence(i.first);
-			while (!stackVect.empty() && isOperand(stackVect.top()) ||  assigningPrecedence(stackVect.top().first) >= precedence)
+			while (!stackVect.empty() && isOperator(stackVect.top()) &&  assigningPrecedence(stackVect.top().first) >= precedence)
 			{
 				postFix.push_back(stackVect.top());
 					stackVect.pop();
@@ -155,8 +167,10 @@ int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 
 	for (auto i : postFix)
 	{
-		if (isOperand(i))
+		if (isdigit(StringtoDigit(i.first)))
+		{
 			stackVect.push(StringtoDigit(i.first));
+		}
 
 		else if (i.second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP || i.second == LexicalAnalyzer::categoryType::ARITH_OP || i.second == LexicalAnalyzer::categoryType::LOGICAL_OP || i.second == LexicalAnalyzer::categoryType::RELATIONAL_OP)
 		{
@@ -188,9 +202,8 @@ int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 			stackVect.push(operand);
 
 		}
-		return 	stackVect.top();
-
 	}
-	return 0;
+	return 	stackVect.top();
+
 }
 	

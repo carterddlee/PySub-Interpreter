@@ -9,15 +9,39 @@
 using namespace std;
 
 class expEvaluator {
+    friend class interface;
 
 public:
     LexicalAnalyzer::tokenLineType infixToPostfix(LexicalAnalyzer::tokenLineType tokenLine);
 
     int PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix);
 
+    void clearSymbolTable()
+    {
+        return symbolTable.clear();
+    }
+
+    void AddtoSymbolTable(std::map<std::string, std::string>& symbolTableType, string key, string value)
+    {
+        symbolTableType[key] = value;
+    }
+
+    string findValueinTable(std::map<std::string, std::string>& symbolTableType, string key) 
+    {
+        auto it = symbolTableType.find(key);
+
+        if (it != symbolTableType.end()) {
+            // Key found in the map, return the associated value
+            return it->second;
+        }
+        else {
+            // Key not found in the map, return a default value or an error message
+            return "Key not found";
+        }
+    }
 
 private:
-    bool isOperand(LexicalAnalyzer::pairType);
+    bool isOperator(LexicalAnalyzer::pairType);
 
     bool IsaDigit(string value);
 

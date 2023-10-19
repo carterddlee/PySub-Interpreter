@@ -31,7 +31,7 @@ void Interface::startInterface()
         bool isEquation = false;
         for (auto ch : input)
         {
-            if (isdigit(ch) || ch == '(')
+            if (isdigit(ch))
             {
                 isEquation = true;
                 break;
@@ -74,12 +74,16 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     if (com == "show" && arg != "")
     {
         token.displayTokens();
-        cout << "This is displaying the tokens";
+        cout << "This is displaying the tokens"<< endl<<endl<<endl<< "<<< ";
     }
 
 
     if (com == "clear")
-        clear();
+    {
+        clear();    
+       expEvaluation.clearSymbolTable();
+
+    }
 
     if (isEquation)
     {
