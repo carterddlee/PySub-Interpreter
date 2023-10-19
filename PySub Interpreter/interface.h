@@ -4,6 +4,8 @@
 #include <string>
 #include <map>
 #include "lexanalyzer.h"
+#include "expevaluator.h"
+
 
 
 using namespace std;
@@ -35,7 +37,7 @@ private:
 
 	programType programCode;
 
-	void getInput(string command, string argument, LexicalAnalyzer& token, bool isEquation, string input);
+	void getInput(string command, string argument, LexicalAnalyzer& token, bool isEquation, string input, expEvaluator& expEvaluation);
 
 	void read(string argument, LexicalAnalyzer& token);
 

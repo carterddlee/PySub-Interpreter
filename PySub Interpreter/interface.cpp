@@ -4,6 +4,8 @@
 #include <fstream>
 #include "interface.h"
 #include "lexanalyzer.h"
+#include "expevaluator.h"
+
 using namespace std;
 
 
@@ -16,6 +18,8 @@ void Interface::startInterface()
 
     LexicalAnalyzer lexAnalysis;
 
+     expEvaluator expEvaluation;
+
     while (keepGoing)
     {
         string input;
@@ -24,12 +28,12 @@ void Interface::startInterface()
         string argumentName = "";
 
         bool addToCommand = true;
-        bool isEquation;
+        bool isEquation = false;
         for (auto ch : input)
         {
             if (isdigit(ch) || ch == '(')
             {
-                isEquation;
+                isEquation = true;
                 break;
             }
             if (ch == ')')
@@ -41,11 +45,11 @@ void Interface::startInterface()
             else
                 argumentName += ch;
         }
-        getInput(commandName, argumentName, lexAnalysis, isEquation, input);
+        getInput(commandName, argumentName, lexAnalysis, isEquation, input, expEvaluation);
     }
 }
 
-void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input)
+void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input, expEvaluator& expEvaluation)
 {
     if (com == "quit")
         keepGoing = false;
@@ -80,7 +84,7 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     if (isEquation)
     {
         auto tokenLine=token.readTokenLine(input);
-        infixToPostfix(tokenLine);
+        expEvaluation.infixToPostfix(tokenLine);
     }
 
 }
