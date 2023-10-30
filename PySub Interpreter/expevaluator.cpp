@@ -42,30 +42,6 @@ int expEvaluator::assigningPrecedence(string symbol)
 }
 
 
-int expEvaluator::StringtoDigit(string element)
-{
-	if (element == "0")
-		return 0;
-	if(element=="1")
-		return 1;
-	if (element == "2")
-		return 2;
-	if (element == "3")
-		return 3;
-	if (element == "4")
-		return 4;
-	if (element == "5")
-		return 5;
-	if (element == "6")
-		return 6;
-	if (element == "7")
-		return 7;
-	if (element == "8")
-		return 8;
-	if (element == "9")
-		return 9;
-
-}
 
 int expEvaluator::operandEvaluation(int operand1, int operand2, string sym)
 {
@@ -118,7 +94,7 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 
 	for (auto i : inFix)
 	{
-		if (IsaDigit(i.first))
+		if ((i.second == LexicalAnalyzer::categoryType::NUMERIC_LITERAL))
 		{
 			postFix.push_back(i);
 			continue;
@@ -156,6 +132,14 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 		postFix.push_back(stackVect.top());
 		stackVect.pop();
 	}
+	cout << "This is the PostFix Expression: ";
+
+	for (auto i : postFix)
+	{
+		cout << i.first << " ";
+	}
+	cout << endl;
+
 	return postFix;
 }
 
@@ -167,9 +151,9 @@ int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 
 	for (auto i : postFix)
 	{
-		if (isdigit(StringtoDigit(i.first)))
+		if (i.second== LexicalAnalyzer::categoryType::NUMERIC_LITERAL)
 		{
-			stackVect.push(StringtoDigit(i.first));
+			stackVect.push(stoi(i.first));
 		}
 
 		else if (i.second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP || i.second == LexicalAnalyzer::categoryType::ARITH_OP || i.second == LexicalAnalyzer::categoryType::LOGICAL_OP || i.second == LexicalAnalyzer::categoryType::RELATIONAL_OP)
@@ -182,7 +166,6 @@ int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 			int result= expEvaluator::operandEvaluation(operand1, operand2, i.first);
 
 			stackVect.push(result);
-			postFix.pop_back();
 		}
 		
 		else if (i.first == "++")

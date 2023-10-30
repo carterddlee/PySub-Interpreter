@@ -133,13 +133,13 @@ LexicalAnalyzer::tokenLineType LexicalAnalyzer::readTokenLine(string programLine
 
         if (isdigit(c))
         {
-            while (isdigit(c))
+            tokenValue = c; // Append digits to the existing tokenValue
+            tokenCategory = categoryType::NUMERIC_LITERAL;
+            while (isdigit(programLine[i+1]))
             {
-                tokenValue += c; // Append digits to the existing tokenValue
-                tokenCategory = categoryType::NUMERIC_LITERAL;
-
                 c = programLine[++i];
 
+                tokenValue += c; // Append digits to the existing tokenValue
             }
         }
         else if (isalpha(c))
