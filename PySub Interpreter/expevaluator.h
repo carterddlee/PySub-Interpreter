@@ -48,8 +48,6 @@ private:
 
     int assigningPrecedence(string);
 
-    int StringtoDigit(string element);
-
 
     int operandEvaluation(int operand1, int operand2, string sym);
 
