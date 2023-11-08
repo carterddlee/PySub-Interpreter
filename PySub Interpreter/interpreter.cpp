@@ -17,7 +17,15 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 		 if (i->second == LexicalAnalyzer::categoryType::COMMENT)
 			 break;
 
-		 if (i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first== "print")
+		 if (i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first == "print")
+		 {
+			 for (i = i + 2; i++ != line.end(); i++)
+			 {
+				 if (i->second == LexicalAnalyzer::categoryType::STRING_LITERAL)
+					 cout << i->first;
+				 if
+			 }
+		 }
 
 
 		
