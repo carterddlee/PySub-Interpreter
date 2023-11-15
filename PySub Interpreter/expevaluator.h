@@ -14,7 +14,11 @@ class expEvaluator {
 
 
 public:
-    LexicalAnalyzer::tokenLineType infixToPostfix(LexicalAnalyzer::tokenLineType tokenLine, symbolTableType symbolTable);
+    typedef std::map<std::string, std::string> symbolTableType;
+
+    symbolTableType symbolTable;
+
+    LexicalAnalyzer::tokenLineType infixToPostfix(LexicalAnalyzer::tokenLineType tokenLine);
 
     int PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix);
 
@@ -23,16 +27,16 @@ public:
         return symbolTable.clear();
     }
 
-    void AddtoSymbolTable(std::map<std::string, std::string>& symbolTableType, string key, string value)
+    void AddtoSymbolTable(string key, string value)
     {
-        symbolTableType[key] = value;
+        symbolTable[key] = value;
     }
 
-    string findValueinTable(std::map<std::string, std::string>& symbolTableType, string key) 
+    string findValueinTable(string key) 
     {
-        auto it = symbolTableType.find(key);
+        auto it = symbolTable.find(key);
 
-        if (it != symbolTableType.end()) {
+        if (it != symbolTable.end()) {
             // Key found in the map, return the associated value
             return it->second;
         }
@@ -53,9 +57,7 @@ private:
 
     int operandEvaluation(int operand1, int operand2, string sym);
 
-    typedef std::map<std::string, std::string> symbolTableType;
 
-    symbolTableType symbolTable;
 };
 
 

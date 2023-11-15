@@ -5,6 +5,8 @@
 #include "interface.h"
 #include "lexanalyzer.h"
 #include "expevaluator.h"
+#include "interpreter.h"
+
 
 using namespace std;
 
@@ -19,6 +21,8 @@ void Interface::startInterface()
     LexicalAnalyzer lexAnalysis;
 
      expEvaluator expEvaluation;
+
+     Interpreter pysubi;
 
     while (keepGoing)
     {
@@ -45,11 +49,11 @@ void Interface::startInterface()
             else
                 argumentName += ch;
         }
-        getInput(commandName, argumentName, lexAnalysis, isEquation, input, expEvaluation);
+        getInput(commandName, argumentName, lexAnalysis, isEquation, input, lexAnalysis, expEvaluation, pysubi);
     }
 }
 
-void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input, expEvaluator& expEvaluation)
+void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input, LexicalAnalyzer lexAnalysis, expEvaluator& expEvaluation, Interpreter& pysubi)
 {
     if (com == "quit")
         keepGoing = false;
@@ -84,6 +88,13 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
        expEvaluation.clearSymbolTable();
 
     }
+    
+    if (com == "run")
+    {
+        for(auto i: lexAnalysis.tokenInfo)
+        pysubi.run(i);
+    }
+
 
     if (isEquation)
     {
@@ -168,14 +179,6 @@ void Interface::helpUtility()
 
     }
 }
-
-
-
-
-
-
-
-
 
 
 

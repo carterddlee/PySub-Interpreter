@@ -10,6 +10,7 @@ using namespace std;
 
 class Interpreter
 {
+public:
 	void run(LexicalAnalyzer::tokenLineType line);
 };
 

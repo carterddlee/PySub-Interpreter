@@ -32,6 +32,7 @@ public:
 
 public:
 
+
     typedef vector<vector<pair<string, categoryType>>> tokenType;
 
     typedef vector<pair<string, categoryType>> tokenLineType;
@@ -44,11 +45,10 @@ public:
 
     void displayTokens();
 
+    tokenType tokenInfo;
 
 
 private:
-
-    tokenType tokenInfo;
     tokenLineType tokenLine;
     pairType tokenPair;
 
