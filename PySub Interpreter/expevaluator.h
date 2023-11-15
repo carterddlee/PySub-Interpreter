@@ -11,8 +11,10 @@ using namespace std;
 class expEvaluator {
     friend class interface;
 
+
+
 public:
-    LexicalAnalyzer::tokenLineType infixToPostfix(LexicalAnalyzer::tokenLineType tokenLine);
+    LexicalAnalyzer::tokenLineType infixToPostfix(LexicalAnalyzer::tokenLineType tokenLine, symbolTableType symbolTable);
 
     int PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix);
 
@@ -39,7 +41,7 @@ public:
             return "Key not found";
         }
     }
-
+   
 private:
     bool isOperator(LexicalAnalyzer::pairType);
 
@@ -51,10 +53,11 @@ private:
 
     int operandEvaluation(int operand1, int operand2, string sym);
 
-
     typedef std::map<std::string, std::string> symbolTableType;
+
     symbolTableType symbolTable;
 };
+
 
 
 #endif EXPEVALUATOR_H

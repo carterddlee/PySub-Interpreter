@@ -99,6 +99,12 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 			postFix.push_back(i);
 			continue;
 		}
+
+		if ((i.second == LexicalAnalyzer::categoryType::IDENTIFIER))
+		{
+			postFix.push_back(findValueinTable(symbolTable, i.second));
+			continue;
+		}
 		
 		else if (i.first == "(")
 			stackVect.push(i);
