@@ -24,6 +24,14 @@ void Interface::startInterface()
 
      Interpreter pysubi;
 
+     string input;
+     string commandName = "";
+     string argumentName = "";
+
+     input.clear();
+     commandName.clear();
+     argumentName.clear();
+
     while (keepGoing)
     {
         string input;
@@ -89,14 +97,13 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
     }
     
-    if (com == "run")
+   if (com == "run")
     {
-        cout << endl;
         for(auto i: lexAnalysis.tokenInfo)
         pysubi.run(i);
-
-        lexAnalysis.tokenInfo.clear();
+        
         expEvaluation.clearSymbolTable();
+        lexAnalysis.tokenInfo.clear();
         cout << endl << endl;
         cout << ">>>";
     }

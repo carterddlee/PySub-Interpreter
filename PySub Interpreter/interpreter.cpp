@@ -47,8 +47,16 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 			  //Checking to see if it is going to take input
 		 {
 			 /*cout << "In the input function" << endl;*/
-			 if((i + 6)->second == LexicalAnalyzer::categoryType::STRING_LITERAL)
-			 cout << (i + 6)->first;
+			  if ((i + 6)->second == LexicalAnalyzer::categoryType::STRING_LITERAL)
+			  {
+				  vector<char> parsedString((i+6)->first.begin(), (i + 6)->first.end());
+
+				  for (int j = 1; j < parsedString.size() - 1; j++)
+					  cout << parsedString[j];
+
+				  cout << " ";
+				  parsedString.clear();
+			  }
 
 			 int inputNumber;
 			 cin >> inputNumber;
@@ -65,7 +73,13 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 			 {
 				 if (i->second == LexicalAnalyzer::categoryType::STRING_LITERAL)
 				 {
-					 cout << i->first << " ";
+					 vector<char> parsedString(i->first.begin(), i->first.end());
+
+					 for(int j=1; j<parsedString.size()-1; j++)
+					 cout <<parsedString[j];
+
+					 cout << " ";
+					 parsedString.clear();
 				 }
 
 				 else if (i->second == LexicalAnalyzer::categoryType::NUMERIC_LITERAL || i->second == LexicalAnalyzer::categoryType::LEFT_PAREN ||
@@ -85,7 +99,6 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 						 else
 						 {
 							 cout << equation[0].first;
-
 							 break;
 						 }
 					 }
@@ -100,10 +113,11 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 				 }
 
 			 }
-			 
-		 }
+			 cout << endl;
 
+		 }
 	}
-	cout << endl;
+	equation.clear();
+
 	return;
  }
