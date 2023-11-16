@@ -91,8 +91,14 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     
     if (com == "run")
     {
+        cout << endl;
         for(auto i: lexAnalysis.tokenInfo)
         pysubi.run(i);
+
+        lexAnalysis.tokenInfo.clear();
+        expEvaluation.clearSymbolTable();
+        cout << endl << endl;
+        cout << ">>>";
     }
 
 

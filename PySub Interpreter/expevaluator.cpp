@@ -141,13 +141,14 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 		postFix.push_back(stackVect.top());
 		stackVect.pop();
 	}
-	cout << "This is the PostFix Expression: ";
+
+	/*cout << "This is the PostFix Expression: ";
 
 	for (auto i : postFix)
 	{
 		cout << i.first << " ";
 	}
-	cout << endl;
+	cout << endl;*/
 
 	return postFix;
 }
