@@ -35,7 +35,7 @@ void Interface::startInterface()
         bool isEquation = false;
         for (auto ch : input)
         {
-            if (isdigit(ch))
+            if (input[0]==isdigit(ch) || input[0] == '(')
             {
                 isEquation = true;
                 break;

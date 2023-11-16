@@ -102,8 +102,9 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 		if ((i.second == LexicalAnalyzer::categoryType::IDENTIFIER))
 		{
 			pair<string, LexicalAnalyzer::categoryType> symbol;
+
 			symbol.first = findValueinTable(i.first);
-			symbol.second = LexicalAnalyzer::categoryType::IDENTIFIER;
+			symbol.second = LexicalAnalyzer::categoryType::NUMERIC_LITERAL;
 			postFix.push_back(symbol);
 			continue;
 		}

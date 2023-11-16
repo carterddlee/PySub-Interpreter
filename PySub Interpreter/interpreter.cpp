@@ -9,6 +9,7 @@
 
 using namespace std;
 
+//Working on input, not working
 
 void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 {
@@ -21,11 +22,10 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 			 break;
 
 
-		 if (i->second == LexicalAnalyzer::categoryType::IDENTIFIER && i+1 != line.end() && (i+1)->second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP
-			 && (i+2)->second != LexicalAnalyzer::categoryType::STRING_LITERAL)//There is assigning for an integer
+		 if (i->second == LexicalAnalyzer::categoryType::IDENTIFIER && i+1 != line.end() && (i+1)->second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP)//There is assigning for an integer
 		 {
 			 if ((i+2)->second == LexicalAnalyzer::categoryType::NUMERIC_LITERAL || (i + 2)->second == LexicalAnalyzer::categoryType::LEFT_PAREN ||
-				 ((i + 2)->second == LexicalAnalyzer::categoryType::IDENTIFIER)) //If the conditions fulfill, it is an equation
+				 (i + 2)->second == LexicalAnalyzer::categoryType::IDENTIFIER ) //If the conditions fulfill, it is an equation
 			 {
 				 for (i=i+2; i != line.end(); i++)
 					 equation.push_back(*i);
@@ -40,10 +40,18 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 		 }
 
 
-		 //if (i->second == LexicalAnalyzer::categoryType::IDENTIFIER && i++ != line.end() && i++->second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP
-			// && i++->second == LexicalAnalyzer::categoryType::STRING_LITERAL)//There is assigning for a string
-			// printEvaluator.AddtoSymbolTable(printEvaluator.symbolTable, i = line.begin())
+	/*	 if (i->second == LexicalAnalyzer::categoryType::IDENTIFIER && i + 1 != line.end() && (i + 1)->second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP
+			 && (i + 2)->second == LexicalAnalyzer::categoryType::KEYWORD && (i + 2)->first == "int" && (i + 3)->second == LexicalAnalyzer::categoryType::LEFT_PAREN &&
+			 (i + 5)->second == LexicalAnalyzer::categoryType::KEYWORD && (i + 5)->first == "input" && (i + 6)->second == LexicalAnalyzer::categoryType::LEFT_PAREN)
+			
+		 {
+			 cout << "       in the input" << endl;
+			 cout << (i + 7)->first << "       in the input" <<  endl;
+			 int inputNumber;
+			 cin >> inputNumber;
+			 printEvaluator.AddtoSymbolTable(line.begin()->first, to_string(inputNumber));
 
+		 }*/
 
 
 
