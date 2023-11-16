@@ -11,7 +11,7 @@ using namespace std;
 
 //Working on input, not working
 
-void Interpreter::run(LexicalAnalyzer::tokenLineType line)
+void Interpreter::run(LexicalAnalyzer::tokenLineType line, expEvaluator expEvaluation)
 {
 	vector<pair<string, LexicalAnalyzer::categoryType>> equation;
 	static expEvaluator printEvaluator;
@@ -31,11 +31,11 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 				 for (i=i+2; i != line.end(); i++)
 					 equation.push_back(*i);
 
-				 auto PostfixEquation = printEvaluator.infixToPostfix(equation);
+				 auto PostfixEquation = expEvaluation.infixToPostfix(equation);
 
-				 int number = printEvaluator.PostfixEvaluator(PostfixEquation);
+				 int number = expEvaluation.PostfixEvaluator(PostfixEquation);
 
-				 printEvaluator.AddtoSymbolTable(line.begin()->first, to_string(number));
+				 expEvaluation.AddtoSymbolTable(line.begin()->first, to_string(number));
 			 break;
 			 }
 		 }
@@ -60,7 +60,7 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 
 			 int inputNumber;
 			 cin >> inputNumber;
-			 printEvaluator.AddtoSymbolTable(line.begin()->first, to_string(inputNumber));
+			 expEvaluation.AddtoSymbolTable(line.begin()->first, to_string(inputNumber));
 
 		 }
 
@@ -92,7 +92,7 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 					 {
 						 if (equation[0].second == LexicalAnalyzer::categoryType::IDENTIFIER)
 						 {
-							 string num = printEvaluator.findValueinTable(equation[0].first);
+							 string num = expEvaluation.findValueinTable(equation[0].first);
 							 cout << num;
 							 break;
 						 }
@@ -102,9 +102,9 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line)
 							 break;
 						 }
 					 }
-					 auto PostfixEquation = printEvaluator.infixToPostfix(equation);
+					 auto PostfixEquation = expEvaluation.infixToPostfix(equation);
 
-					 int number = printEvaluator.PostfixEvaluator(PostfixEquation);
+					 int number = expEvaluation.PostfixEvaluator(PostfixEquation);
 					 cout << number << " ";
 					 equation.clear();
 

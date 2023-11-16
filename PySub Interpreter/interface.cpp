@@ -83,7 +83,16 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     if (com == "show" && arg == "")
         show(programCode);
 
-    if (com == "show" && arg != "")
+    if (com == "show" && arg == "variables")
+    {
+        cout << "Showing variables" << endl;
+        for (auto i : expEvaluation.symbolTable)
+            cout << "This value of " << i.second << "is " << i.first << endl;
+        
+    }
+
+
+    if (com == "show" && arg == "tokens")
     {
         token.displayTokens();
         cout << "This is displaying the tokens"<< endl<<endl<<endl<< "<<< ";
@@ -100,9 +109,8 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
    if (com == "run")
     {
         for(auto i: lexAnalysis.tokenInfo)
-        pysubi.run(i);
+        pysubi.run(i, expEvaluation);
         
-        expEvaluation.clearSymbolTable();
         lexAnalysis.tokenInfo.clear();
         cout << endl << endl;
         cout << ">>>";
