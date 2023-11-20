@@ -6,7 +6,7 @@
 #include "lexanalyzer.h"
 using namespace std;
 
-
+//Working version
 void LexicalAnalyzer::displayTokens()
 {
     int lineCount = 0; // Initialize line count
@@ -135,7 +135,7 @@ LexicalAnalyzer::tokenLineType LexicalAnalyzer::readTokenLine(string programLine
         {
             tokenValue = c; // Append digits to the existing tokenValue
             tokenCategory = categoryType::NUMERIC_LITERAL;
-            while (isdigit(programLine[i+1]))
+            while (isdigit(programLine[i + 1]))
             {
                 c = programLine[++i];
 

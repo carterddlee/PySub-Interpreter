@@ -38,7 +38,7 @@ private:
 
 	programType programCode;
 
-	void getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input, LexicalAnalyzer lexAnalysis, expEvaluator& expEvaluation, Interpreter& pysubi);
+	void getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input, expEvaluator& expEvaluation, Interpreter& pysubi);
 
 	void read(string argument, LexicalAnalyzer& token);
 

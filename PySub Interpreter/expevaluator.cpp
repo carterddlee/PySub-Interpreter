@@ -9,12 +9,12 @@
 
 using namespace std;
 
-bool expEvaluator:: isOperator(LexicalAnalyzer::pairType i)
+bool expEvaluator::isOperator(LexicalAnalyzer::pairType i)
 {
 	return i.second == LexicalAnalyzer::categoryType::ASSIGNMENT_OP || i.second == LexicalAnalyzer::categoryType::ARITH_OP || i.second == LexicalAnalyzer::categoryType::LOGICAL_OP || i.second == LexicalAnalyzer::categoryType::RELATIONAL_OP;
 }
 
-bool expEvaluator:: IsaDigit(string value)
+bool expEvaluator::IsaDigit(string value)
 {
 	return value == "0" || value == "1" || value == "2" || value == "3" || value == "4" || value == "5" || value == "6" || value == "7" || value == "8" || value == "9";
 }
@@ -68,7 +68,7 @@ int expEvaluator::operandEvaluation(int operand1, int operand2, string sym)
 	if (sym == "==")
 		return operand1 == operand2;
 	if (sym == "not")
-			return 0; // operand1 not operand2 is false
+		return 0; // operand1 not operand2 is false
 	if (sym == "and")
 		return operand1 && operand2;
 	if (sym == "||")
@@ -79,18 +79,18 @@ int expEvaluator::operandEvaluation(int operand1, int operand2, string sym)
 		cout << "Error, invalid expression." << endl;
 		return 0;
 	}
-		
+
 }
 
 
 
-LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::tokenLineType inFix)
+LexicalAnalyzer::tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::tokenLineType inFix)
 {
 	int precedence;
-	
-	stack<pair<string, LexicalAnalyzer ::categoryType>> stackVect;
 
-	vector<pair<string, LexicalAnalyzer:: categoryType>> postFix;
+	stack<pair<string, LexicalAnalyzer::categoryType>> stackVect;
+
+	vector<pair<string, LexicalAnalyzer::categoryType>> postFix;
 	for (auto i : inFix)
 	{
 		if ((i.second == LexicalAnalyzer::categoryType::NUMERIC_LITERAL))
@@ -108,7 +108,7 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 			postFix.push_back(symbol);
 			continue;
 		}
-		
+
 		else if (i.first == "(")
 			stackVect.push(i);
 
@@ -125,10 +125,10 @@ LexicalAnalyzer:: tokenLineType expEvaluator::infixToPostfix(LexicalAnalyzer::to
 		else if (isOperator(i))
 		{
 			precedence = assigningPrecedence(i.first);
-			while (!stackVect.empty() && isOperator(stackVect.top()) &&  assigningPrecedence(stackVect.top().first) >= precedence)
+			while (!stackVect.empty() && isOperator(stackVect.top()) && assigningPrecedence(stackVect.top().first) >= precedence)
 			{
 				postFix.push_back(stackVect.top());
-					stackVect.pop();
+				stackVect.pop();
 			}
 			stackVect.push(i);
 		}
@@ -161,7 +161,7 @@ int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 
 	for (auto i : postFix)
 	{
-		if (i.second== LexicalAnalyzer::categoryType::NUMERIC_LITERAL)
+		if (i.second == LexicalAnalyzer::categoryType::NUMERIC_LITERAL)
 		{
 			stackVect.push(stoi(i.first));
 		}
@@ -173,11 +173,11 @@ int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 			int operand1 = stackVect.top();
 			stackVect.pop();
 
-			int result= expEvaluator::operandEvaluation(operand1, operand2, i.first);
+			int result = expEvaluator::operandEvaluation(operand1, operand2, i.first);
 
 			stackVect.push(result);
 		}
-		
+
 		else if (i.first == "++")
 		{
 			int operand = stackVect.top();
@@ -199,4 +199,3 @@ int expEvaluator::PostfixEvaluator(LexicalAnalyzer::tokenLineType postFix)
 	return 	stackVect.top();
 
 }
-	

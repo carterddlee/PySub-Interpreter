@@ -18,19 +18,20 @@ void Interface::startInterface()
     cout << "Type 'help' for more information or 'quit' to exit" << endl << endl;
     cout << ">>> ";
 
-    LexicalAnalyzer lexAnalysis;
+    LexicalAnalyzer token;
 
-     expEvaluator expEvaluation;
+    expEvaluator expEvaluation;
 
-     Interpreter pysubi;
+    Interpreter pysubi;
 
-     string input;
-     string commandName = "";
-     string argumentName = "";
 
-     input.clear();
-     commandName.clear();
-     argumentName.clear();
+    string input;
+    string commandName = "";
+    string argumentName = "";
+
+    input.clear();
+    commandName.clear();
+    argumentName.clear();
 
     while (keepGoing)
     {
@@ -43,7 +44,7 @@ void Interface::startInterface()
         bool isEquation = false;
         for (auto ch : input)
         {
-            if (input[0]==isdigit(ch) || input[0] == '(')
+            if (input[0] == isdigit(ch) || input[0] == '(')
             {
                 isEquation = true;
                 break;
@@ -57,11 +58,11 @@ void Interface::startInterface()
             else
                 argumentName += ch;
         }
-        getInput(commandName, argumentName, lexAnalysis, isEquation, input, lexAnalysis, expEvaluation, pysubi);
+        getInput(commandName, argumentName, token, isEquation, input, expEvaluation, pysubi);
     }
 }
 
-void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input, LexicalAnalyzer lexAnalysis, expEvaluator& expEvaluation, Interpreter& pysubi)
+void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool isEquation, string input, expEvaluator& expEvaluation, Interpreter& pysubi)
 {
     if (com == "quit")
         keepGoing = false;
@@ -78,40 +79,44 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
 
     if (com == "read")
+    {
+        token.tokenInfo.clear();
         read(arg, token);
+    }
 
     if (com == "show" && arg == "")
         show(programCode);
 
     if (com == "show" && arg == "variables")
     {
-        cout << "Showing variables" << endl;
+        cout << endl << "Showing variables:" << endl;
         for (auto i : expEvaluation.symbolTable)
-            cout << "This value of " << i.second << "is " << i.first << endl;
-        
+            cout << "The value of " << i.first << " is " << i.second << endl;
+
+        cout << endl << ">>>";
+        expEvaluation.symbolTable.clear();
     }
 
 
     if (com == "show" && arg == "tokens")
     {
         token.displayTokens();
-        cout << "This is displaying the tokens"<< endl<<endl<<endl<< "<<< ";
+        cout << "This is displaying the tokens" << endl << endl << endl << "<<< ";
     }
 
 
     if (com == "clear")
     {
-        clear();    
-       expEvaluation.clearSymbolTable();
+        clear();
+        expEvaluation.clearSymbolTable();
 
     }
-    
-   if (com == "run")
+
+    if (com == "run")
     {
-        for(auto i: lexAnalysis.tokenInfo)
-        pysubi.run(i, expEvaluation);
-        
-        lexAnalysis.tokenInfo.clear();
+        for (auto i : token.tokenInfo)
+            pysubi.run(i, expEvaluation);
+
         cout << endl << endl;
         cout << ">>>";
     }
@@ -119,9 +124,9 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
     if (isEquation)
     {
-        auto tokenLine=token.readTokenLine(input);
+        auto tokenLine = token.readTokenLine(input);
         auto PostfixEvaluator = expEvaluation.infixToPostfix(tokenLine);
-        int result=expEvaluation.PostfixEvaluator(PostfixEvaluator);
+        int result = expEvaluation.PostfixEvaluator(PostfixEvaluator);
         cout << "The answer to the equation is " << result << endl;
     }
 

@@ -32,7 +32,7 @@ public:
         symbolTable[key] = value;
     }
 
-    string findValueinTable(string key) 
+    string findValueinTable(string key)
     {
         auto it = symbolTable.find(key);
 
@@ -45,7 +45,7 @@ public:
             return "Key not found";
         }
     }
-   
+
 private:
     bool isOperator(LexicalAnalyzer::pairType);
 
