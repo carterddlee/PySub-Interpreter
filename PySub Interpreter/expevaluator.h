@@ -49,8 +49,6 @@ public:
 private:
     bool isOperator(LexicalAnalyzer::pairType);
 
-    bool IsaDigit(string value);
-
 
     int assigningPrecedence(string);
 

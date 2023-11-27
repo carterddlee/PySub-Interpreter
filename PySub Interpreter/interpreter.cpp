@@ -10,7 +10,7 @@
 using namespace std;
 
 
-void Interpreter::run(LexicalAnalyzer::tokenLineType line, expEvaluator& printEvaluator)
+void Interpreter::run(LexicalAnalyzer::tokenLineType& line, expEvaluator& printEvaluator)
 {
 	vector<pair<string, LexicalAnalyzer::categoryType>> equation;
 
@@ -113,6 +113,20 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType line, expEvaluator& printEv
 			cout << endl;
 
 		}
+
+		else if (i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first == "if")
+		{
+			for (i = i + 1; i->first != ":"; i++)
+				equation.push_back(*i);
+
+			auto PostfixEquation = printEvaluator.infixToPostfix(equation);
+
+			int result = printEvaluator.PostfixEvaluator(PostfixEquation);
+
+			if(result==true)
+
+		}
+		
 	}
 	equation.clear();
 

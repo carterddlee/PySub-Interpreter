@@ -29,6 +29,7 @@ public:
 
 	void startInterface();
 
+	int ctoi(char value);
 
 private:
 	map<string, string> helpMap;
@@ -45,7 +46,6 @@ private:
 	void show(const vector <string> v);
 
 	void clear();
-
 
 	void helpUtility();
 
