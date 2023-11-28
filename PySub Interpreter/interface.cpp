@@ -114,13 +114,48 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
     if (com == "run")
     {
+        bool conditional;
+        bool inWhile;
+        vector<pair<string, LexicalAnalyzer::categoryType>> whileCondition;
         for (auto i : token.tokenInfo)
-            pysubi.run(i, expEvaluation);
+        {
+            if (i[0].second == LexicalAnalyzer::categoryType::INDENT)
+            {
+                if (conditional == false && inWhile == false)
+                    continue;
 
+                if(conditional == true)
+                    pysubi.run(i, expEvaluation, conditional, inWhile);
+
+                if (inWhile == true)
+                    pysubi.run(i, expEvaluation, conditional, inWhile);
+            }
+
+
+        /*    if (conditional == false && i[0].second == LexicalAnalyzer::categoryType::INDENT)
+                continue;
+
+            if (conditional == true && i[0].second == LexicalAnalyzer::categoryType::INDENT)
+            {
+                pysubi.run(i, expEvaluation, conditional, whileCondition);
+            }
+
+            if (inWhile == false && i[0].second == LexicalAnalyzer::categoryType::INDENT)
+                continue;
+
+            else if (inWhile == true)
+            {
+                pysubi.run(i, expEvaluation, conditional);
+
+            }*/
+
+            pysubi.run(i, expEvaluation, conditional, inWhile);
+
+        }
         cout << endl << endl;
         cout << ">>>";
-    }
 
+    }
 
     if (isEquation)
     {
