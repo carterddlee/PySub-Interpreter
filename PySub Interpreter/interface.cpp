@@ -114,6 +114,7 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
     if (com == "run")
     {
+        bool skipElse = false;
         bool inWhile;
         bool conditional = false;
 
@@ -121,16 +122,39 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
         for(int i=0; i< token.tokenInfo.size(); i++)
         {
-            if (conditional == true && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT)
+            if (conditional == true && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
             {
                 pysubi.run(token.tokenInfo[i], expEvaluation, conditional, inWhile);
+                skipElse = true;
                 continue;
-
             }
 
-            if (conditional == false && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT)
+            if (conditional == false && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT)//If if statement is false
+            {
+                skipElse = false;
                 continue;
+            }
+            if (skipElse == true && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was true
+            {
+                int j = 1;
+                while (i+j < token.tokenInfo.size()&& token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+                {
+                    j++;
+                    continue;
+                }
+                i+j;
+            }
+            if (skipElse == false && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was false
+            {
+                int j = 1;
+                while (token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+                {
+                    pysubi.run(token.tokenInfo[i+j], expEvaluation, conditional, inWhile);
+                    continue;
+                }
+                i + j;
 
+            }
 
             //if (i[0][0].second == LexicalAnalyzer::categoryType::INDENT && i[0].second == i + 1[0].second)
             //{

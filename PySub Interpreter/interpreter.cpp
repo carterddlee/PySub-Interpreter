@@ -125,10 +125,10 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType& line, expEvaluator& printE
 			break;
 		}
 
-		else if (i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first == "else")
-		{
-			break;
-		}
+		//else if (i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first == "else")
+		//{
+		//	break;
+		//}
 
 		/*else if (i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first == "while")
 		{
