@@ -115,19 +115,16 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     if (com == "run")
     {
         bool skipElse = false;
-        bool skipElif = false;
         bool inWhile;
         bool conditional = false;
-        bool ifTrue = false;
 
         vector<pair<string, LexicalAnalyzer::categoryType>> whileCondition;
 
         for(int i=0; i< token.tokenInfo.size(); i++)
         {
-            if (!ifTrue && conditional == true && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
+            if (conditional == true && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
             {
                 pysubi.run(token.tokenInfo[i], expEvaluation, conditional, inWhile);
-                ifTrue = true;
                 skipElse = true;
                 continue;
             }

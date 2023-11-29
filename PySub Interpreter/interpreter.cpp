@@ -114,7 +114,7 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType& line, expEvaluator& printE
 
 		}
 
-		else if (i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first == "if"|| i->first == "elif")
+		else if (i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first == "if"|| i->second == LexicalAnalyzer::categoryType::KEYWORD && i->first == "elif")
 		{
 			for (i = i + 1; i->first != ":"; i++)
 				equation.push_back(*i);
