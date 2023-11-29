@@ -117,6 +117,7 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
         bool skipElse = false;
         bool inWhile;
         bool conditional = false;
+        bool ifStatementExecuted = false;
 
         vector<pair<string, LexicalAnalyzer::categoryType>> whileCondition;
 
@@ -124,38 +125,17 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
         {
             if (conditional == true && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
             {
-                pysubi.run(token.tokenInfo[i], expEvaluation, conditional, inWhile);
+                pysubi.run(token.tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
                 skipElse = true;
                 continue;
             }
 
             if (conditional == false && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT)//If if statement is false
             {
-                skipElse = false;
+                //skipElse = false;
                 continue;
             }
 
-            //if (skipElif == true && token.tokenInfo[i][0].first == "elif")//Encounter an else statement and the if statement was true
-            //{
-            //    int j = 1;
-            //    while (i + j < token.tokenInfo.size() && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
-            //    {
-            //        j++;
-            //        continue;
-            //    }
-            //    i = i + j;
-            //}
-            //if (skipElif == false && token.tokenInfo[i][0].first == "elif")//Encounter an else statement and the if statement was false
-            //{
-            //    int j = 1;
-            //    while (i + j < token.tokenInfo.size() && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
-            //    {
-            //        pysubi.run(token.tokenInfo[i + j], expEvaluation, conditional, inWhile);
-            //        j++;
-            //    }
-            //    i = i + j;
-
-            //}
 
             if (skipElse == true && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was true
             {
@@ -166,21 +146,21 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
                     continue;
                 }
                 i=i+j;
+                skipElse = false;
             }
             if (skipElse == false && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was false
             {
                 int j = 1;
                 while (i + j < token.tokenInfo.size() && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
                 {
-                    pysubi.run(token.tokenInfo[i + j], expEvaluation, conditional, inWhile);
+                    pysubi.run(token.tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
                     j++;
                 }
                 i=i + j;
-
             }
 
          
-            pysubi.run(token.tokenInfo[i], expEvaluation, conditional, inWhile);
+            pysubi.run(token.tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
 
         }
 

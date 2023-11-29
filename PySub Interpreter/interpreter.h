@@ -11,7 +11,7 @@ using namespace std;
 class Interpreter
 {
 public:
-	void run(LexicalAnalyzer::tokenLineType& line, expEvaluator& expEvaluation, bool& conditional, bool& inWhile);
+	void run(LexicalAnalyzer::tokenLineType& line, expEvaluator& expEvaluation, bool& conditional, bool& ifStatementExecuted, bool& inWhile);
 };
 
 #endif INTERPRETER_H
