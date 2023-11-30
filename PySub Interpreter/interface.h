@@ -31,6 +31,9 @@ public:
 
 	int ctoi(char value);
 
+	void interactive(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator& expEvaluation, Interpreter& pysubi);
+
+
 private:
 	map<string, string> helpMap;
 
