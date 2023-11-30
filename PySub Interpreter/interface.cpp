@@ -117,14 +117,17 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
         bool skipElse = false;
         bool inWhile = false;
         bool conditional = false;
-        bool ifStatementExecuted = false;
-
         for(int i=0; i< token.tokenInfo.size(); i++)
         {
             if (token.tokenInfo[i].size() == 0)
                 continue;
             if (conditional == true && i < token.tokenInfo.size() && token.tokenInfo[i].size() != 0 && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
             {
+              /*  if (token.tokenInfo[i -1][0].second == LexicalAnalyzer::categoryType::INDENT && token.tokenInfo[i - 1][0].first != token.tokenInfo[i][0].first)
+                {
+                    cout << "Error, idents are not the same. File will not run" << endl;
+                    break;
+                }*/
                 pysubi.run(token.tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
                 skipElse = true;
                 continue;
