@@ -121,6 +121,8 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
         for(int i=0; i< token.tokenInfo.size(); i++)
         {
+            if (token.tokenInfo[i].size() == 0)
+                continue;
             if (conditional == true && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
             {
                 pysubi.run(token.tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
