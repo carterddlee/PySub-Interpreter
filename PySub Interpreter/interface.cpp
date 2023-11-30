@@ -159,20 +159,22 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
             if (inWhile==true)
           {
-              int j = 1;
+              int j = 0;
               while (inWhile)
               {
+                  j = 0;
                   while (i + j < token.tokenInfo.size() && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
                   {
                       pysubi.run(token.tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
                       j++;
                   }
-                  pysubi.run(token.tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
+                  inWhile = false;
+                  pysubi.run(token.tokenInfo[i-1], expEvaluation, conditional, skipElse, inWhile);
               }
               i = i + j;
           }
 
-         
+            if(i < token.tokenInfo.size())
             pysubi.run(token.tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
 
         }
