@@ -139,16 +139,15 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
 
             if (skipElse == true && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was true
             {
-                int j = 1;
-                while (i+j < token.tokenInfo.size()&& token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+               int j = 1;
+                while (i+j < token.tokenInfo.size()&& token.tokenInfo[i + j].size() != 0 &&token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
                 {
                     j++;
-                    continue;
                 }
                 i=i+j;
                 skipElse = false;
             }
-            if (skipElse == false && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was false
+            if (skipElse == false && i < token.tokenInfo.size() && token.tokenInfo[i].size() != 0 && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was false
             {
                 int j = 1;
                 while (i + j < token.tokenInfo.size() && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
@@ -165,9 +164,10 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
               while (inWhile)
               {
                   j = 0;
-                  while (i + j < token.tokenInfo.size() && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+                  while (i + j < token.tokenInfo.size() && token.tokenInfo[i+j].size() != 0 && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
                   {
-                      pysubi.run(token.tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
+
+                       pysubi.run(token.tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
                       j++;
                   }
                   inWhile = false;

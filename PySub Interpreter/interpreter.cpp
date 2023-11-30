@@ -31,7 +31,7 @@ void Interpreter::run(LexicalAnalyzer::tokenLineType& line, expEvaluator& printE
 				for (i = i + 3; i != line.end(); i++)
 					equation.push_back(*i);
 				else
-					for (i = i + 3; i != line.end(); i++)
+					for (i = i + 2; i != line.end(); i++)
 						equation.push_back(*i);
 
 				auto PostfixEquation = printEvaluator.infixToPostfix(equation);
