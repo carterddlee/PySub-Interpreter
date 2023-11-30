@@ -31,7 +31,8 @@ public:
 
 	int ctoi(char value);
 
-	void interactive(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator& expEvaluation, Interpreter& pysubi);
+	void scriptRun(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator& expEvaluation, Interpreter& pysubi);
+	void interactiveRun(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator& expEvaluation, Interpreter& pysubi);
 
 
 private:

@@ -44,7 +44,7 @@ void Interface::startInterface()
         bool isEquation = false;
         for (auto ch : input)
         {
-            if (isdigit(input[0]) || input[0] == '(' || input[1]== '=')
+            if (isdigit(input[0]) || input[0] == '(')
             {
                 isEquation = true;
                 break;
@@ -67,10 +67,10 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     if (com == "quit")
         keepGoing = false;
 
-    if (com == "help" && arg == "")
+    else if (com == "help" && arg == "")
         helpUtility();
 
-    if (com == "help" && arg != "")
+    else if (com == "help" && arg != "")
     {
         cout << endl;
         cout << helpMap[arg] << endl;
@@ -78,16 +78,16 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     }
 
 
-    if (com == "read")
+    else if (com == "read")
     {
         token.tokenInfo.clear();
         read(arg, token);
     }
 
-    if (com == "show" && arg == "")
+    else if (com == "show" && arg == "")
         show(programCode);
 
-    if (com == "show" && arg == "variables")
+    else if (com == "show" && arg == "variables")
     {
         cout << endl << "Showing variables:" << endl;
         for (auto i : expEvaluation.symbolTable)
@@ -98,108 +98,45 @@ void Interface::getInput(string com, string arg, LexicalAnalyzer& token, bool is
     }
 
 
-    if (com == "show" && arg == "tokens")
+    else if (com == "show" && arg == "tokens")
     {
         token.displayTokens();
         cout << "This is displaying the tokens" << endl << endl << endl << "<<< ";
     }
 
 
-    if (com == "clear")
+    else if (com == "clear")
     {
         clear();
         expEvaluation.clearSymbolTable();
 
     }
 
-    if (com == "run")
+    else if (com == "run")
     {
-        bool skipElse = false;
-        bool inWhile = false;
-        bool conditional = false;
-        for(int i=0; i< token.tokenInfo.size(); i++)
-        {
-            if (token.tokenInfo[i].size() == 0)
-                continue;
-            if (conditional == true && i < token.tokenInfo.size() && token.tokenInfo[i].size() != 0 && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
-            {
-              /*  if (token.tokenInfo[i -1][0].second == LexicalAnalyzer::categoryType::INDENT && token.tokenInfo[i - 1][0].first != token.tokenInfo[i][0].first)
-                {
-                    cout << "Error, idents are not the same. File will not run" << endl;
-                    break;
-                }*/
-                pysubi.run(token.tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
-                skipElse = true;
-                continue;
-            }
-
-            if (conditional == false && inWhile == false && i < token.tokenInfo.size() && token.tokenInfo[i].size() != 0 && token.tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT)//If if statement is false
-            {
-                //skipElse = false;
-                continue;
-            }
-
-
-            if (skipElse == true && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was true
-            {
-               int j = 1;
-                while (i+j < token.tokenInfo.size()&& token.tokenInfo[i + j].size() != 0 &&token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
-                {
-                    j++;
-                }
-                i=i+j;
-                skipElse = false;
-            }
-            if (skipElse == false && i < token.tokenInfo.size() && token.tokenInfo[i].size() != 0 && token.tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was false
-            {
-                int j = 1;
-                while (i + j < token.tokenInfo.size() && token.tokenInfo[i + j].size() != 0 && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
-                {
-                    pysubi.run(token.tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
-                    j++;
-                }
-                i=i + j;
-            }
-
-            if (inWhile==true)
-          {
-              int j = 0;
-              while (inWhile)
-              {
-                  j = 0;
-                  while (i + j < token.tokenInfo.size() && token.tokenInfo[i+j].size() != 0 && token.tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
-                  {
-
-                       pysubi.run(token.tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
-                      j++;
-                  }
-                  inWhile = false;
-                  pysubi.run(token.tokenInfo[i-1], expEvaluation, conditional, skipElse, inWhile);
-              }
-              i = i + j;
-          }
-
-            if(i < token.tokenInfo.size())
-            pysubi.run(token.tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
-
-        }
-
-        
-
-        
-        cout << endl << endl;
-        cout << ">>>";
-
+        scriptRun(token.tokenInfo, expEvaluation, pysubi);
     }
 
-    if (isEquation)
+    else if (com == "" && arg == "")
+        cout << "";
+
+    else if (isEquation)
     {
         auto tokenLine = token.readTokenLine(input);
         auto PostfixEvaluator = expEvaluation.infixToPostfix(tokenLine);
         int result = expEvaluation.PostfixEvaluator(PostfixEvaluator);
         cout << "The answer to the equation is " << result << endl;
+        cout << ">>> ";
+
     }
 
+    else
+    {
+        auto tokenLine = token.readTokenLine(input);
+        token.tokenInfo.push_back(tokenLine);
+        interactiveRun(token.tokenInfo, expEvaluation, pysubi);
+        token.tokenInfo.clear();
+    }
 }
 
 
@@ -276,25 +213,29 @@ void Interface::helpUtility()
     }
 }
 
-void Interface:: interactive(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator& expEvaluation, Interpreter& pysubi)
+void Interface:: scriptRun(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator& expEvaluation, Interpreter& pysubi)
 {
     bool skipElse = false;
-    bool inWhile;
+    bool inWhile = false;
     bool conditional = false;
-    bool ifStatementExecuted = false;
-
     for (int i = 0; i < tokenInfo.size(); i++)
     {
-        if (conditional == true && tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
+        if (tokenInfo[i].size() == 0)
+            continue;
+        if (conditional == true && i < tokenInfo.size() && tokenInfo[i].size() != 0 && tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
         {
+            /*  if (token.tokenInfo[i -1][0].second == LexicalAnalyzer::categoryType::INDENT && token.tokenInfo[i - 1][0].first != token.tokenInfo[i][0].first)
+              {
+                  cout << "Error, idents are not the same. File will not run" << endl;
+                  break;
+              }*/
             pysubi.run(tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
             skipElse = true;
             continue;
         }
 
-        if (conditional == false && tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT)//If if statement is false
+        if (conditional == false && inWhile == false && i < tokenInfo.size() && tokenInfo[i].size() != 0 && tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT)//If if statement is false
         {
-            //skipElse = false;
             continue;
         }
 
@@ -302,18 +243,17 @@ void Interface:: interactive(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator
         if (skipElse == true && tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was true
         {
             int j = 1;
-            while (i + j < tokenInfo.size() && tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+            while (i + j < tokenInfo.size() && tokenInfo[i + j].size() != 0 && tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
             {
                 j++;
-                continue;
             }
             i = i + j;
             skipElse = false;
         }
-        if (skipElse == false && tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was false
+        if (skipElse == false && i < tokenInfo.size() && tokenInfo[i].size() != 0 && tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was false
         {
             int j = 1;
-            while (i + j < tokenInfo.size() && tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+            while (i + j < tokenInfo.size() && tokenInfo[i + j].size() != 0 && tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
             {
                 pysubi.run(tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
                 j++;
@@ -321,8 +261,101 @@ void Interface:: interactive(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator
             i = i + j;
         }
 
+        if (inWhile == true)
+        {
+            int j = 0;
+            while (inWhile)
+            {
+                j = 0;
+                while (i + j < tokenInfo.size() && tokenInfo[i + j].size() != 0 && tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+                {
 
-        pysubi.run(tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
+                    pysubi.run(tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
+                    j++;
+                }
+                inWhile = false;
+                pysubi.run(tokenInfo[i - 1], expEvaluation, conditional, skipElse, inWhile);
+            }
+            i = i + j;
+        }
+
+        if (i < tokenInfo.size())
+            pysubi.run(tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
+
+    }
+
+    cout << endl << endl;
+    cout << ">>>";
+}
+
+void Interface::interactiveRun(LexicalAnalyzer::tokenType& tokenInfo, expEvaluator& expEvaluation, Interpreter& pysubi)
+{
+    bool skipElse = false;
+    bool inWhile = false;
+    bool conditional = false;
+    for (int i = 0; i < tokenInfo.size(); i++)
+    {
+        if (tokenInfo[i].size() == 0)
+            continue;
+        if (conditional == true && i < tokenInfo.size() && tokenInfo[i].size() != 0 && tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT) //If the if statement is true
+        {
+            /*  if (token.tokenInfo[i -1][0].second == LexicalAnalyzer::categoryType::INDENT && token.tokenInfo[i - 1][0].first != token.tokenInfo[i][0].first)
+              {
+                  cout << "Error, idents are not the same. File will not run" << endl;
+                  break;
+              }*/
+            pysubi.run(tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
+            skipElse = true;
+            continue;
+        }
+
+        if (conditional == false && inWhile == false && i < tokenInfo.size() && tokenInfo[i].size() != 0 && tokenInfo[i][0].second == LexicalAnalyzer::categoryType::INDENT)//If if statement is false
+        {
+            continue;
+        }
+
+
+        if (skipElse == true && tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was true
+        {
+            int j = 1;
+            while (i + j < tokenInfo.size() && tokenInfo[i + j].size() != 0 && tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+            {
+                j++;
+            }
+            i = i + j;
+            skipElse = false;
+        }
+        if (skipElse == false && i < tokenInfo.size() && tokenInfo[i].size() != 0 && tokenInfo[i][0].first == "else")//Encounter an else statement and the if statement was false
+        {
+            int j = 1;
+            while (i + j < tokenInfo.size() && tokenInfo[i + j].size() != 0 && tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+            {
+                pysubi.run(tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
+                j++;
+            }
+            i = i + j;
+        }
+
+        if (inWhile == true)
+        {
+            int j = 0;
+            while (inWhile)
+            {
+                j = 0;
+                while (i + j < tokenInfo.size() && tokenInfo[i + j].size() != 0 && tokenInfo[i + j][0].second == LexicalAnalyzer::categoryType::INDENT)
+                {
+
+                    pysubi.run(tokenInfo[i + j], expEvaluation, conditional, skipElse, inWhile);
+                    j++;
+                }
+                inWhile = false;
+                pysubi.run(tokenInfo[i - 1], expEvaluation, conditional, skipElse, inWhile);
+            }
+            i = i + j;
+        }
+
+        if (i < tokenInfo.size())
+            pysubi.run(tokenInfo[i], expEvaluation, conditional, skipElse, inWhile);
 
     }
 
