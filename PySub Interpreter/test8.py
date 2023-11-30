@@ -13,3 +13,17 @@ elif x==6:
 
 else
 	print("wrong")
+
+x= int(input("Enter value for x:"))
+
+if x==5:
+	print("x==5")
+
+elif x==6:
+	print("x==6")
+
+else
+	print("wrong")
+
+
+print("File is done")
